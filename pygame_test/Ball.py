@@ -1,12 +1,11 @@
-from pathlib import Path
-
+from settings import *
 import pygame
 from pygame.locals import *
 import random
 
-BASE_PATH = Path(__file__).resolve().parent
 MIN_SPEED = 3
 MAX_SPEED = 10
+
 
 class Ball:
     def __init__(self, window, window_width, window_height):

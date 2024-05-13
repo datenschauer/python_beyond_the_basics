@@ -5,14 +5,8 @@ from pygame.locals import *
 import sys
 from pathlib import Path
 from SimpleButton import *
-
-# define constants
-BASE_PATH = Path(__file__).resolve().parent
-BLACK = (0, 0, 0)
-GRAY = (128, 128, 128)
-WINDOW_WIDTH = 1024 * 2
-WINDOW_HEIGHT = int(768 * 1.3)
-FRAMES_PER_SECOND = 60
+from colors import *
+from settings import *
 
 # initialize the world
 pygame.init()
@@ -23,8 +17,8 @@ clock = pygame.time.Clock()
 
 # Initialize Variables:
 buttonA = SimpleButton(window, (25, 130),
-                      BASE_PATH / 'images' / 'buttonAUp.png',
-                      BASE_PATH / 'images' / 'buttonADown.png')
+                       BASE_PATH / 'images' / 'buttonAUp.png',
+                       BASE_PATH / 'images' / 'buttonADown.png')
 
 buttonB = SimpleButton(window, (175, 130),
                        BASE_PATH / 'images' / 'buttonBUp.png',
@@ -51,9 +45,7 @@ while True:
         elif buttonC.handle_event(event):
             print('User has clicked the button C!')
 
-
     # do "per frame actions"
-
 
     # clear the window
     window.fill(GRAY)

@@ -5,14 +5,10 @@ from pygame.locals import *
 import sys
 from pathlib import Path
 from Ball import *
+from settings import *
+from colors import *
 
-# define constants
-BASE_PATH = Path(__file__).resolve().parent
-BLACK = (0, 0, 0)
-WINDOW_WIDTH = 1024 * 2
-WINDOW_HEIGHT = int(768 * 1.3)
-FRAMES_PER_SECOND = 60
-N_PIXELS_TO_MOVE = 10
+# constants
 N_BALLS = 10
 
 # initialize the world
