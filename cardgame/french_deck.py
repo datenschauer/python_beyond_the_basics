@@ -10,7 +10,7 @@ colors = ("♠️", "♣️", "♥️", "♦️")
 
 class FrenchCard(Card):
     def __gt__(self, other: Card) -> bool:
-        return self.value > other.value
+        return self._card_value > other._card_value
 
 
 class FrenchDeck(Deck):
