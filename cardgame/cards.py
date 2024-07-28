@@ -70,10 +70,13 @@ class Hand:
     _cards: list[Card]
     _MAX_HAND: int
 
-    def __init__(self, max_hand: int = None):
+    def __init__(self, max_hand: int = None, cards: list[Card] = None):
         if max_hand:
             self._MAX_HAND = max_hand
-        self._cards = []
+        if cards:
+            self._cards = cards
+        else:
+            self._cards = []
 
     def draw_cards(self, cards: list[Card]) -> None:
         if self._cards == self._MAX_HAND:

@@ -1,5 +1,6 @@
 from collections import Counter
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from french_deck import FrenchCard
 from enum import Enum
 
 from cards import Hand
@@ -51,8 +52,8 @@ def first_or_second_lower(first_result: PokerHandResult, second_result: PokerHan
 class PokerHand(Hand):
     _MAX_HAND = 5
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, cards: list[FrenchCard]) -> None:
+        super().__init__(max_hand=self._MAX_HAND, cards=cards)
 
     def _list_values(self) -> list[int]:
         return [card.get_value() for card in self._cards]
