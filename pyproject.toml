@@ -1,0 +1,11 @@
+[build-system]
+requires=["setuptools >= 72.0.0"]
+
+[project]
+requires-python=">= 3.12"
+name="Python beyond the basics"
+description="Ein Fortgeschrittenen-Kurs für die Entwicklung mit Python"
+version="0.0.1"
+authors=[
+    {name="Stefan Böhringer", email="stefan.boehringer@ur.de"}
+]

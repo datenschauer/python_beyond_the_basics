@@ -123,6 +123,7 @@ class PokerHand(Hand):
         # if there are the same ranks, other conditions matter
         if selfRank.val == otherRank.val:
             match selfRank:
+                # Reihenfolge der Cases nach Wahrscheinlichkeit --> Speed!
                 case PokerHandResult(_, PokerRank.Highest, addendum):
                     # the next highest card wins!
                     return all_equal_or_lower(addendum, otherRank.addendum)
@@ -159,6 +160,9 @@ class PokerHand(Hand):
 
                 case PokerHandResult(_, PokerRank.SFlush, addendum):
                     return max(addendum) < max(otherRank.addendum)
+
+                case unknown_rank:
+                    raise ValueError(f"Unknown rank {unknown_rank}")
 
         return selfRank.val < otherRank.val
 
