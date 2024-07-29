@@ -34,16 +34,16 @@ def all_equal_or_lower(l1: list[int], l2: list[int]) -> bool:
 
 
 def first_or_highest_kicker_is_lower(first_result: PokerHandResult, second_result: PokerHandResult) -> bool:
-    s1st, *sRest = sorted(first_result.addendum["counts"], reverse=True)
-    o1st, *oRest = sorted(second_result.addendum["counts"], reverse=True)
+    s1st, *sRest = first_result.addendum["counts"]
+    o1st, *oRest = second_result.addendum["counts"]
     if s1st == o1st:
         return all_equal_or_lower(sRest, oRest)
     return s1st < o1st
 
 
 def first_or_second_lower(first_result: PokerHandResult, second_result: PokerHandResult) -> bool:
-    first1st, first2nd = sorted(first_result.addendum["counts"], reverse=True)
-    second1st, second2nd = sorted(second_result.addendum["counts"], reverse=True)
+    first1st, first2nd = first_result.addendum["counts"]
+    second1st, second2nd = second_result.addendum["counts"]
     if first1st == second1st:
         return first2nd < second2nd
     return first1st < second1st
