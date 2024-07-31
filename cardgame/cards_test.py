@@ -2,7 +2,6 @@ from collections import Counter
 
 import pytest
 
-from cardgame import french_deck
 from french_deck import *
 
 

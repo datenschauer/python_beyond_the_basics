@@ -1,0 +1,198 @@
+<h1 id="python-und-objekte">Python und Objekte</h1>
+<p>Objekte spielen in Python eine grundlegende Rolle. So lautet schon
+der erste Satz über das sog. <em>Python Data Model</em> in der Python
+Dokumentation folgendermaßen: &gt; Objects are Python’s abstraction for
+data. All data in a Python program is represented by objects or by
+relations between objects.</p>
+<p>Somit ist wirklich alles, mit was wir es in Python zu tun haben, ein
+Objekt. Egal, ob wir einen numerischen Typ definieren
+(<code>x = 3</code>) oder eine Liste (<code>x = [1, 2, 3]</code>). Immer
+definieren wir ein Objekt, das eine Identität (der Platz im Speicher),
+einen Typ (hier z.B. <code>int</code> oder <code>list</code>) und einen
+Wert (hier <em>3</em>, bzw. die Elemente <em>1, 2 und 3</em>) hat. Diese
+Objekte sind die Bausteine unserer Programme, die wir mit Python
+schreiben.</p>
+<p>Was ist aber, wenn wir unsere eigenen Objekte gestalten wollen (und
+wieso sollten wir das überhaupt wollen)?</p>
+<h2 id="objekte-selbst-gestalten">Objekte selbst gestalten</h2>
+<p>Beginnen wir bei unserem laufenden Beispiel, das ich in der
+Einleitung skizziert habe. Wir wollen ein Kartenspiel programmieren,
+genauer gesagt eine Poker-Variante, das man online gemeinsam und gegen
+einen KI-Gegner spielen kann.</p>
+<p>Was sind die Grundbausteine eines Kartenspiels? Natürlich die Karten,
+oder? In unserem Programm können wir ohne diese Bausteine nicht
+auskommen. Jede Karte in einem “normalen” Kartenspiel (man denke an das
+französiche Blatt, das wir beim Poker brauchen) hat eine
+<strong>Namen/Bezeichner</strong> (z.B. “Ass”), einen
+<strong>Wert</strong> (z.B. 11 Punkte für den “Buben”) und eine
+<strong>Farbe</strong> (z.B. Pik, Herz, etc.). Wir müssen diese Karten
+irgendwie modellieren. Wenn wir nun nicht wüssten, wie wir Objekte in
+Python bauen können, wie würden wir dann eine Karte, bzw. einen Stapel
+an Karten modellieren? Wahrscheinlich würden wir auf die einfachen
+Python Datenstrukturen, die wir kennen zurückgreifen. Vielleicht würden
+wir dazu ein Gemenge an Tupeln oder Dictionaries und Listen verwenden.
+Eine “Pokerhand” mit 5 Karten könnte dann so aussehen:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>poker_hand <span class="op">=</span> [</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;Ace&quot;</span>, <span class="dv">14</span>, <span class="st">&quot;Heart&quot;</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;King&quot;</span>, <span class="dv">13</span>, <span class="st">&quot;Spades&quot;</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;10&quot;</span>, <span class="dv">10</span>, <span class="st">&quot;Diamond&quot;</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;10&quot;</span>, <span class="dv">10</span>, <span class="st">&quot;Spades&quot;</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;4&quot;</span>, <span class="dv">4</span>, <span class="st">&quot;Heart&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<p>Wenn man nun den “Wert” dieser Hand berechnen will und dafür z.B.
+eine Funktion schreiben möchte, die prüft, ob ein Pärchen “vorhanden”
+ist, so könnte dies wiederum so aussehen:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> has_pair(poker_hand):</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> Counter([card[<span class="dv">1</span>] <span class="cf">for</span> card <span class="kw">in</span> poker_hand])</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span> <span class="kw">in</span> c.values()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>has_pair(poker_hand)</span></code></pre></div>
+<blockquote>
+<p>True</p>
+</blockquote>
+<p>Ich möchte unsere Aufmerksamkeit vor allem auf die Zeile innerhalb
+der Funktion lenken, die die Werte zählt:
+<code>Counter([card[1] for card in poker_hand])</code>. Wenn wir diesen
+Code just in diesem Moment betrachten, dann ist uns klar, was
+<code>card[1]</code> bedeutet. Es liest den Wert der Karte aus dem Tupel
+aus. Aber ist uns das auch in vielen Wochen noch so klar? Wir könnten
+das Ganze immerhin mit einem Kommentar versehen. Man könnte auch auf die
+vielleicht noch bessere Idee kommen, für die Abbildung der Karten in
+unserem Modell eine Dictionary zu verweden; etwa so:</p>
+<pre><code>poker_hand = [
+    {&quot;name&quot;: &quot;Ace&quot;, &quot;value&quot;: 14, &quot;color&quot;: &quot;Heart&quot;},
+    {&quot;name&quot;: &quot;King&quot;, &quot;value&quot;: 13, &quot;color&quot;: &quot;Spades&quot;},
+    ...
+]</code></pre>
+<p>Und dementsprechend würde wir
+<code>Counter([card.get("value") for card in poker_hand])</code>
+aufrufen. Das ist sicherlich schon viel lesbarer. Doch was ist, wenn wir
+uns entscheiden, dass unser Karten-Objekt noch andere Werte braucht. Wie
+sieht eventuell mit Defaultwerten aus? Datenstrukturen wie Tupel oder
+Dictionaries sind zwar sehr flexibel, aber wenn es darum geht mentale
+Objekte der echten Welt in ein programmatisches Modell zu überführen,
+dann macht es Sinn, die Möglichkeit zu haben, selbst Objekte anlegen zu
+können. Objekte, die ihre eigene “Identität” besitzen, und deren
+Einzigartigkeit aber auch Unterscheidbarkeit darin liegt, welche
+Attribute sie haben.</p>
+<p>Doch es geht nicht nur um die Attribute von Objekten, sondern auch
+darum, was bestimmte Objekte <strong>“tun”</strong> können. Denken wir
+z.B. an das String-Objekt (<code>str</code>) in Python. Es kann mit
+Hilfe der <code>.upper()</code> Methode die einzelnene Zeichen ihrer
+Sequenz “groß schreiben”. Könnte nicht so auch die “Pokerhand”, die wir
+oben als normale Liste definiert haben, eine Methode haben? Was ist,
+wenn ein Nutzer aus seiner Pokerhand Karten abwirft, oder Karten aus
+seiner Hand einer anderen Hand gibt, oder die Karten in seiner Hand
+mischt. Wäre es da nicht gut, statt direkt mit Listen und anderen
+Datenstrukturen zu hantieren, einfach Methoden aufrufen zu können,
+wie:</p>
+<pre><code>poker_hand.throw(1)
+poker_hand.deal(2, to=other_poker_hand)
+poker_hand.shuffle()
+
+poker_hand &lt; other_poker_hand</code></pre>
+<p>Ja sogar einfach mit Vergleichsoperatoren die Wertigkeiten der
+einzelnen Hände, wie in der letzten Zeile zu vergleichen, wäre doch eine
+tolle Sache. Und genau das können Objekte in Python, Objekte, die wir
+uns selbst definieren können. Objekte, deren Benutzung unsere Code-Basis
+nicht nur sauber und aufgeräumt halten (welche Konzepte es hier genau
+gibt, sehen wir später noch), sondern auch den Code gerade bei komplexen
+Anwendungen lesbar halten. Und gerade die Lesbarkeit und
+Verständlichkeit von Code war immer schon eine der herausragenden
+Stärken von Python.</p>
+<h2 id="objekte-und-klassen">Objekte und Klassen</h2>
+<p>Wie definieren wir also unsere eigenen Objekte in Python? Das erste,
+was wir dazu machen müssen, ist, uns eine <strong>Klasse</strong> zu
+definieren? Eine Klasse? Was ist das nun schon wieder für ein Konzept?
+Kurz gesagt bilden Klassen die “Blaupause”, bzw. den “Bauplan” für einen
+Typ von Objekten. Die Objekte werden so gebaut/gestaltet, wie es der
+Bauplan also die Klasse vorschreibt. Am Beispiel des Karten-Objekts für
+unser Pokerspiel bedeutet dies, dass die Klasse folgendes als Bauplan
+definieren muss: jedes Kartenobjekt hat einen Namen, einen Wert und eine
+Farbe.</p>
+<p>Man definiert eine Klasse mit dem Schlüsselwort <code>class</code>,
+gefolgt von einem Namen (die Konvention ist hier, dass Klassennamen
+immer groß geschrieben werden) und einem Doppelpunkt, der den
+eingerückten Block einleitet, in dem dann die Attribute und Methoden
+definiert werden.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Card:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code></pre></div>
+<p>Diese Klasse, obwohl wir noch keine Attribute oder Methoden definiert
+haben, können wir schon benutzen:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> Card()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>c.name <span class="op">=</span> <span class="st">&quot;Ace&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>c.value <span class="op">=</span> <span class="dv">14</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>c.color <span class="op">=</span> <span class="st">&quot;♥️&quot;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>c<span class="sc">.</span>name<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>c<span class="sc">.</span>value<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>c<span class="sc">.</span>color<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<blockquote>
+<p>Ace, 14, ♥️</p>
+</blockquote>
+<p>Python erlaubt es also, ein Objekt aus einer Klasse zu erzeugen und
+daran jegliches Attribut “anzuhängen”, dass dann wieder aufgerufen
+werden kann. Doch möchte man seine Klassen schon ein bisschen “strikter”
+definieren. Wir wollen, dass eine Karte <strong>immer</strong> einen
+Namen, einen Wert und eine Farbe hat.</p>
+<h3 id="die-init-methode">Die <strong>init</strong> Methode</h3>
+<p>Zu diesem Zweck gibt es eine spezielle Methode, die man in einer
+Klasse defnieren kann. Die sogenannte <code>__init__</code>-Methode. Die
+Methode ist die erste und wichtigste der sog. <strong>magic</strong>,
+oder <strong>special Methods</strong> in Python, die wegen ihres
+doppelten Unterstrichs am Anfang und am Ende auch
+<strong>dunder</strong> (double under) <strong>Methods</strong> genannt
+werden. Wir werden einige weitere noch im Laufe dieses Kapitels kennen
+lernen.</p>
+<p>Wenn wir nun diese <code>__init__</code> Methode implementieren
+lernen außerdem gleich etwas Generelles darüber, wie wir Methoden (auch
+ganz “normale”) für eine Klasse in Python definieren.</p>
+<p>Lassen Sie zunächst diesen Code auf sich wirken:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Card:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, value, color):</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.name <span class="op">=</span> name</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.value <span class="op">=</span> value</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.color <span class="op">=</span> color</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> show_card(<span class="va">self</span>):</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f&quot;</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>color<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> Card(<span class="st">&quot;Ace&quot;</span>, <span class="dv">14</span>, <span class="st">&quot;♥️&quot;</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>c.show_card()</span></code></pre></div>
+<blockquote>
+<p>♥️ Ace</p>
+</blockquote>
+<p>Hier sind nun einige Sachen zu erklären! Die <code>__init__</code>
+Methode nimmt vier Parameter entgegen: <code>self, name, value</code>
+und <code>color</code>. Im “Body” dieser Funktion, werden dann die
+Attribute <code>name, value</code> und <code>color</code> dem Objekt
+<code>self</code>, das mit übergeben wurde zugeordnet. Dabei
+<strong>müssen</strong> die übergebenen Parameter und die damit
+definierten Attribute von <code>self</code> nicht den gleichen Namen
+haben. Es ist aber Konvention, und sicherlich auch nützlich für die
+Lesbarkeit des Codes, diese gleich zu benennen.</p>
+<p>Wir sehen weiter, dass dann in der <code>show_card()</code> Methode
+im Body diese Attribute über das <code>self</code> Objekt wieder
+aufgerufen werden können.</p>
+<p>Wir sehen letzens aber auch, dass bei der eigentlichen Erzeugung des
+Objekts beim Aufruf von <code>Card()</code> nur die Parameter
+<code>name</code>, <code>value</code> und <code>color</code>, nicht aber
+<code>self</code> übergeben werden müssen. Was hat das zu bedeuten?</p>
+<p>Zunächst sollte man wissen, dass <code>self</code> nur eine
+Konvention ist. Es könnte auch <code>this</code> heißen, oder
+<code>dieses_objekt_hier</code>. Es ist aber <strong>immer</strong> und
+das gilt für <strong>alle</strong> Methoden einer Klasse, der
+<strong>erste</strong> Parameter in der Signatur einer Methode (selbst
+im Falle von <code>show_card()</code>, die ja ohne Parameter aufgerufen
+wird.</p>
+<p>Die Implementierung von Klassen und Objekten in Python ist
+folgendermaßen implementiert:</p>
